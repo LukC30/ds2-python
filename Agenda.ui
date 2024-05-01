@@ -59,7 +59,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit_2"/>
+        <widget class="QLineEdit" name="textEdit_2"/>
        </item>
       </layout>
      </item>
@@ -73,7 +73,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit_4"/>
+        <widget class="QLineEdit" name="textNome"/>
        </item>
       </layout>
      </item>
@@ -82,12 +82,12 @@
        <item>
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string> </string>
+          <string>Email</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit_3"/>
+        <widget class="QLineEdit" name="textEmail"/>
        </item>
       </layout>
      </item>
@@ -96,12 +96,12 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>TO PUTO</string>
+          <string>TO PUTOFONE</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QLineEdit" name="textTelefone"/>
        </item>
       </layout>
      </item>
@@ -118,14 +118,14 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QRadioButton" name="radioButton">
+      <widget class="QRadioButton" name="checkedResidencial">
        <property name="text">
         <string>RESIDENCIAL</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QRadioButton" name="radioButton_2">
+      <widget class="QRadioButton" name="checkedCasa">
        <property name="text">
         <string>CASEIRO</string>
        </property>
