@@ -57,7 +57,12 @@ def Consultar ():
         for f in range (0,5):
             listarContatos.tabelaContatos.setItem(i, f, QtWidgets.QTableWidgetItem(str(dados[i][f])))
 
+def Excluir():
+    row = listarContatos.tabelaContatos.clicked()
+    cursor = banco.cursor()
+    cursor.execute(f'delete from tbl_contatos where id = {row[0]}')
 
+    
 def EsconderJanela():
     listarContatos.hide()
     agenda.show()
