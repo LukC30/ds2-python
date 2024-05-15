@@ -6,7 +6,6 @@ app = QtWidgets.QApplication([])
 
 agenda = uic.loadUi('Agenda.ui')
 listarContatos = uic.loadUi("ListaCadastro.ui")
-agenda.btnConsultar.clicked
 
 banco = mysql.connector.connect(
     host="localhost",
@@ -18,10 +17,9 @@ banco = mysql.connector.connect(
 if(banco):
     print("Estamos dentro do cu do guilherme")
 
-# def main():
-#     nome = agenda.
+# 
     
-def main():
+def Cadastro():
     name = agenda.textNome.text()
     email = agenda.textEmail.text()
     telefone = agenda.textTelefone.text()
@@ -44,7 +42,30 @@ def main():
     except Exception as e:
         print(f"Sua requisição nao deu certo veja: {e}")    
 
-agenda.cadButton.clicked.connect(main)
+def Consultar ():
+    print("Entramos no cu do guilherme dnv")
+    listarContatos.show()
+    agenda.hide()
+    cursor = banco.cursor()
+    
+    cursor.execute('select * from tbl_contatos')
+    dados = cursor.fetchall()
+    listarContatos.tabelaContatos.setRowCount(len(dados))
+    listarContatos.tabelaContatos.setColumnCount(5)
+    
+    for i in range(0, len(dados)):
+        for f in range (0,5):
+            listarContatos.tabelaContatos.setItem(i, f, QtWidgets.QTableWidgetItem(str(dados[i][f])))
 
+
+def EsconderJanela():
+    listarContatos.hide()
+    agenda.show()
+    
+
+listarContatos.voltarButton.clicked.connect(EsconderJanela)
+
+agenda.cadButton.clicked.connect(Cadastro)
+agenda.consButton.clicked.connect(Consultar)
 agenda.show()
 app.exec()

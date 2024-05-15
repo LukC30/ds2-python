@@ -4,7 +4,7 @@
  id int unsigned auto_increment primary key,
  nome varchar(50),
  email varchar(50),
- telefone varchar(11),
+ telefone varchar(20),
  tipo_telefone enum ("residencial","celular", "não informado")
  
  
