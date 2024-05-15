@@ -5,6 +5,9 @@ from reportlab.pdfgen import canvas
 app = QtWidgets.QApplication([])
 
 agenda = uic.loadUi('Agenda.ui')
+listarContatos = uic.loadUi("ListaCadastro.ui")
+agenda.btnConsultar.clicked
+
 banco = mysql.connector.connect(
     host="localhost",
     user="root",
