@@ -85,14 +85,14 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="voltarButton_2">
+      <widget class="QPushButton" name="pdfButton">
        <property name="text">
         <string>Gerar PDF</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="consButton_6">
+      <widget class="QPushButton" name="deleteButton">
        <property name="text">
         <string>Excluir contato</string>
        </property>

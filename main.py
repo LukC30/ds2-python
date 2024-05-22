@@ -1,7 +1,8 @@
 from PyQt5 import uic, QtWidgets
 import mysql.connector
-
 from reportlab.pdfgen import canvas
+
+
 app = QtWidgets.QApplication([])
 
 agenda = uic.loadUi('Agenda.ui')
@@ -58,10 +59,43 @@ def Consultar ():
             listarContatos.tabelaContatos.setItem(i, f, QtWidgets.QTableWidgetItem(str(dados[i][f])))
 
 def Excluir():
-    row = listarContatos.tabelaContatos.clicked()
+    linhaContato = listarContatos.tabelaContatos.currentRow()
+    listarContatos.tabelaContatos.removeRow(linhaContato)
+    
     cursor = banco.cursor()
-    cursor.execute(f'delete from tbl_contatos where id = {row[0]}')
-
+    cursor.execute(f"select id from tbl_contatos")
+    contatos_lidos = cursor.fetchall()
+    valorId= contatos_lidos[linhaContato][0]
+    cursor.execute(f"Delete from tbl_contatos where id = {str(valorId)}")
+    banco.commit()
+    
+    
+    
+def GerarPDF():
+    cursor = banco.cursor()
+    cursor.execute("Select * from tbl_contatos")
+    contatosLidos = cursor.fetchall()
+    
+    y = 0
+    pdf = canvas.Canvas("Lista_contatos.pdf")
+    pdf.setFont("Times-Bold", 20)
+    pdf.drawString(200,800, "Lista de contatos")
+    pdf.setFont("Times-Bold", 10)
+    pdf.drawString(10,750, "ID")
+    pdf.drawString(110,750, "NOME")
+    pdf.drawString(210,750, "EMAIL")
+    pdf.drawString(410,750, "TELEFONE")
+    pdf.drawString(490,750, "TIPO DE CONTATO")
+    
+    for i in range (0, len(contatosLidos)):
+        y = y+50
+        pdf.drawString(10,750 - y, str(contatosLidos[i][0]))
+        pdf.drawString(110,750 - y, str(contatosLidos[i][1]))
+        pdf.drawString(210,750 - y, str(contatosLidos[i][2]))
+        pdf.drawString(410,750 - y, str(contatosLidos[i][3]))
+        pdf.drawString(490,750 - y, str(contatosLidos[i][4]))
+    pdf.save()
+    print('PDF gerado com sucesso!')
     
 def EsconderJanela():
     listarContatos.hide()
@@ -69,7 +103,8 @@ def EsconderJanela():
     
 
 listarContatos.voltarButton.clicked.connect(EsconderJanela)
-
+listarContatos.deleteButton.clicked.connect(Excluir)
+listarContatos.pdfButton.clicked.connect(GerarPDF)
 agenda.cadButton.clicked.connect(Cadastro)
 agenda.consButton.clicked.connect(Consultar)
 agenda.show()
