@@ -1,25 +1,12 @@
 from PyQt5 import uic, QtWidgets
-import mysql.connector
 from reportlab.pdfgen import canvas
-
+from database import banco
 
 app = QtWidgets.QApplication([])
 
 agenda = uic.loadUi('Agenda.ui')
 listarContatos = uic.loadUi("ListaCadastro.ui")
-
-banco = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="db_agenda"
-)
-
-if(banco):
-    print("Estamos dentro do cu do guilherme")
-
-# 
-    
+alterar = uic.loadUi("Alterar.ui")
 def Cadastro():
     name = agenda.textNome.text()
     email = agenda.textEmail.text()
@@ -46,7 +33,7 @@ def Cadastro():
 def Consultar ():
     print("Entramos no cu do guilherme dnv")
     listarContatos.show()
-    agenda.hide()
+    alterar.hide()
     cursor = banco.cursor()
     
     cursor.execute('select * from tbl_contatos')
@@ -101,11 +88,51 @@ def EsconderJanela():
     listarContatos.hide()
     agenda.show()
     
+def CatarID():
+    linhaContato = listarContatos.tabelaContatos.currentRow()
+    cursor = banco.cursor()
+    cursor.execute(f"select id from tbl_contatos")
+    contatos_lidos = cursor.fetchall()
+    valorId = contatos_lidos[linhaContato][0]  
+    print(valorId)
+    ExibirAlterar(str(valorId))
+    
+    
+def ExibirAlterar(valorID):
+    listarContatos.hide()
+    alterar.show()
+    alterar.textID.setText(valorID)     
 
+def Alteracao():
+    name = agenda.textNome.text()
+    email = agenda.textEmail.text()
+    telefone = agenda.textTelefone.text()
+    
+    isChecked = ""
+    
+    if agenda.checkedResidencial.isChecked():
+        isChecked = "Residencial"
+    elif agenda.checkedCasa.isChecked():
+        isChecked = "celular"
+    else:
+        isChecked = 'comi o do meu lado esquerdo'
+        isChecked = "não informado"
+    # try:
+    #     cursor=banco.cursor()
+    #     cursor.execute("")
+    
+    
+
+
+
+    
 listarContatos.voltarButton.clicked.connect(EsconderJanela)
 listarContatos.deleteButton.clicked.connect(Excluir)
 listarContatos.pdfButton.clicked.connect(GerarPDF)
+listarContatos.AltButton.clicked.connect(CatarID)
 agenda.cadButton.clicked.connect(Cadastro)
 agenda.consButton.clicked.connect(Consultar)
+alterar.cadButton.clicked.connect()
+alterar.consButton.clicked.connect(Consultar)
 agenda.show()
 app.exec()

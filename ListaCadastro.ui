@@ -99,7 +99,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="consButton_7">
+      <widget class="QPushButton" name="AltButton">
        <property name="text">
         <string>Alterar Contato</string>
        </property>
