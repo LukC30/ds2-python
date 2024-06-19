@@ -15,7 +15,7 @@ def Cadastro():
     isChecked = ""
     
     if agenda.checkedResidencial.isChecked():
-        isChecked = "Residencial"
+        isChecked = "residencial"
     elif agenda.checkedCasa.isChecked():
         isChecked = "celular"
     else:
@@ -33,7 +33,10 @@ def Cadastro():
 def Consultar ():
     print("Entramos no cu do guilherme dnv")
     listarContatos.show()
-    alterar.hide()
+    if(agenda):
+        agenda.hide()
+    else:
+        alterar.hide()
     cursor = banco.cursor()
     
     cursor.execute('select * from tbl_contatos')
@@ -91,48 +94,59 @@ def EsconderJanela():
 def CatarID():
     linhaContato = listarContatos.tabelaContatos.currentRow()
     cursor = banco.cursor()
-    cursor.execute(f"select id from tbl_contatos")
+    cursor.execute(f"select * from tbl_contatos")
     contatos_lidos = cursor.fetchall()
-    valorId = contatos_lidos[linhaContato][0]  
+    valorId = contatos_lidos[linhaContato][0]
+    nome = contatos_lidos[linhaContato][1]
+    email = contatos_lidos[linhaContato][2]
+    telefone = contatos_lidos[linhaContato][3]
+    dados = [valorId, nome, email, telefone]
+    
     print(valorId)
-    ExibirAlterar(str(valorId))
+    ExibirAlterar(dados)
     
     
-def ExibirAlterar(valorID):
+def ExibirAlterar(dados):
     listarContatos.hide()
     alterar.show()
-    alterar.textID.setText(valorID)     
-
+    alterar.textID.setText(str(dados[0]))
+    alterar.textNome.setText(dados[1])
+    alterar.textEmail.setText(dados[2])
+    alterar.textTelefone.setText(dados[3])
+    
+    
 def Alteracao():
-    name = agenda.textNome.text()
-    email = agenda.textEmail.text()
-    telefone = agenda.textTelefone.text()
+    id = alterar.textID.text()
+    name = alterar.textNome.text()
+    email = alterar.textEmail.text()
+    telefone = alterar.textTelefone.text()
     
     isChecked = ""
     
-    if agenda.checkedResidencial.isChecked():
-        isChecked = "Residencial"
-    elif agenda.checkedCasa.isChecked():
+    if alterar.checkedResidencial.isChecked():
+        isChecked = "residencial"
+    elif alterar.checkedCasa.isChecked():
         isChecked = "celular"
     else:
         isChecked = 'comi o do meu lado esquerdo'
         isChecked = "não informado"
-    # try:
-    #     cursor=banco.cursor()
-    #     cursor.execute("")
+    try:
+        cursor=banco.cursor()
+        cursor.execute(f"Update tbl_contatos a set a.nome = '{name}', a.email = '{email}', a.telefone = '{telefone}', a.tipo_telefone = '{isChecked}' where a.id = {int(id)}")
+        print(f"Update tbl_contatos a set a.nome = '{name}', a.email = '{email}', a.telefone = '{telefone}', a.tipo_telefone = '{isChecked}' where a.id = {int(id)}")
+        banco.commit()
+        print("Registro alterado com sucesso!")
+    except Exception as e:
+        print(f"Deu erro: {e}")
     
-    
-
-
-
-    
+        
 listarContatos.voltarButton.clicked.connect(EsconderJanela)
 listarContatos.deleteButton.clicked.connect(Excluir)
 listarContatos.pdfButton.clicked.connect(GerarPDF)
 listarContatos.AltButton.clicked.connect(CatarID)
 agenda.cadButton.clicked.connect(Cadastro)
 agenda.consButton.clicked.connect(Consultar)
-alterar.cadButton.clicked.connect()
+alterar.cadButton.clicked.connect(Alteracao)
 alterar.consButton.clicked.connect(Consultar)
 agenda.show()
 app.exec()
